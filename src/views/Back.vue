@@ -2,20 +2,22 @@
   <div id="app" class="container">
     <p v-if="loading">Loading...</p>
     <div v-else>
-      <h3 class="heading">Restaurant List</h3>
+      <h3 class="heading">Users</h3>
       <table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">ID</th>
+            <th scope="col">Avatar</th>
             <th scope="col">Name</th>
-            <th scope="col">Location</th>
+            <th scope="col">Email</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="d in all_data" v-bind:key="d">
-            <td>{{ d.id }}</td>
-            <td>{{ d.name}}</td>
-            <td>{{ d.vicinity }}</td>
+          <tr v-for="user in all_users" v-bind:key="user">
+            <td>{{ user.id }}</td>
+            <td><img v-bind:src="user.avatar" width="50"/></td>
+            <td>{{ user.first_name + " " + user.last_name }}</td>
+            <td>{{ user.email }}</td>
           </tr>
         </tbody>
       </table>
@@ -31,14 +33,14 @@ export default {
   data () {
     return {
       loading: false,
-      all_data: null
+      all_users: null
     }
   },
   mounted () {
     this.loading = true;
     axios
-      .get('https://localhost:44365/api/GoogleMap')
-      .then(response => (this.all_data = response.data.data))
+      .get('https://reqres.in/api/users?page=1')
+      .then(response => (this.all_users = response.data.data))
       .catch(error => console.log(error))
       .finally(() => this.loading = false)
   }
